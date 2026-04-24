@@ -1,0 +1,41 @@
+project:
+  name: pso_credit_card_fraud_detection
+  random_state: 42
+
+data:
+  raw_data_path: data/raw/creditcard.csv
+  parquet_cache_path: data/processed/creditcard.parquet  # auto-created on first run
+  target_column: Class
+  scale_columns:
+    - Time
+    - Amount
+  test_size: 0.2
+  validation_size: 0.2
+  sample_size: 50000   # null = use full dataset | int = stratified sample (all fraud kept)
+
+training:
+  use_smote: true
+  baseline_model: logistic_regression
+  search_model: logistic_regression
+  final_model: random_forest
+  default_threshold: 0.5
+
+pso:
+  n_particles: 30
+  n_iterations: 50
+  inertia: 0.72
+  cognitive: 1.49
+  social: 1.49
+  min_features: 5
+  feature_penalty: 0.05
+  early_stopping_rounds: 10   # stop if no improvement for N iterations
+  metric_weights:
+    pr_auc: 0.45
+    recall: 0.35
+    f1: 0.20
+
+artifacts:
+  model_dir: models
+  output_dir: outputs
+  figure_dir: outputs/figures
+  report_dir: outputs/reports
