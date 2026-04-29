@@ -1,3 +1,10 @@
+"""End-to-end training orchestration.
+
+This script loads data, trains a baseline model, performs PSO-based feature
+selection, retrains a final model on the selected features, computes metrics,
+and writes reports and figures.
+"""
+
 from __future__ import annotations
 
 import json
@@ -41,6 +48,14 @@ def _timer(label: str, start: float) -> None:
 
 
 def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
+    """Main entry for the training pipeline.
+
+    Steps performed:
+    1. Load data (with parquet caching and optional sampling).
+    2. Train baseline model and compute metrics.
+    3. Run Binary PSO to select features using a weighted objective.
+    4. Retrain a final model on selected features and save results.
+    """
     t0 = time.time()
     project_root = Path(__file__).resolve().parents[1]
     config = load_config(project_root / config_path)
@@ -105,6 +120,7 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
     _timer("baseline training", t2)
 
     # ── PSO feature selection ──────────────────────────────────────────────────
+    # We split part of the training set for validating feature subsets proposed by PSO.
     X_search_train, X_val, y_search_train, y_val = train_test_split(
         X_train,
         y_train,
@@ -118,6 +134,15 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
     early_stopping_rounds = int(config["pso"].get("early_stopping_rounds", 0))
 
     def objective(mask) -> float:
+        """Objective function for PSO.
+
+        For a boolean feature mask, we:
+        1. Build a pipeline with only the selected features.
+        2. Fit it on `X_search_train` and evaluate on `X_val`.
+        3. Compute a weighted score that combines PR-AUC, recall, and F1.
+        4. Subtract a penalty proportional to the fraction of selected features
+           to encourage smaller feature subsets.
+        """
         selected_features = [f for f, s in zip(all_features, mask) if s]
         pipeline = build_training_pipeline(
             model_name=search_model_name,
@@ -129,11 +154,13 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
         val_proba = pipeline.predict_proba(X_val[selected_features])[:, 1]
         metrics = compute_metrics(y_val, val_proba, threshold=default_threshold)
 
+        # Weighted sum of chosen metrics; configured in `config.yaml`.
         weighted_score = (
             float(metric_weights["pr_auc"]) * metrics["pr_auc"]
             + float(metric_weights["recall"]) * metrics["recall"]
             + float(metric_weights["f1"]) * metrics["f1"]
         )
+        # Penalize larger feature sets to prefer parsimonious solutions.
         penalty = feature_penalty * (len(selected_features) / len(all_features))
         return float(weighted_score - penalty)
 
