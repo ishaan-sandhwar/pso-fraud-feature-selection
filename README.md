@@ -50,6 +50,17 @@ pip install -r requirements.txt
 Place `creditcard.csv` at `data/raw/creditcard.csv`.  
 Download: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
 
+The raw CSV (144 MB) is **not** committed — it exceeds GitHub's 100 MB per-file limit.
+The parquet cache in `data/processed/` is also excluded; it regenerates on the first run.
+
+## Pre-computed Artifacts
+Trained models (`models/`) and results (`outputs/`) **are** committed, so you can launch
+the dashboard and inspect metrics without re-training or downloading the dataset first:
+
+```bash
+streamlit run app/dashboard.py
+```
+
 ## Run Training
 ```bash
 python run_training.py

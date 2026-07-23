@@ -1,0 +1,7 @@
+{
+  "rows": 50000,
+  "columns": 31,
+  "fraud_cases": 492,
+  "normal_cases": 49508,
+  "fraud_ratio": 0.00984
+}

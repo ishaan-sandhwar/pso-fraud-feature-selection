@@ -1,0 +1,37 @@
+{
+  "baseline": {
+    "threshold": 0.9999882132828916,
+    "roc_auc": 0.974397050276382,
+    "pr_auc": 0.881296748395403,
+    "precision": 0.9879518072289156,
+    "recall": 0.8367346938775511,
+    "f1": 0.9060773480662984,
+    "balanced_accuracy": 0.9183168520892502,
+    "mcc": 0.9084073770179174,
+    "selected_feature_count": 30,
+    "model": "logistic_regression"
+  },
+  "pso_model": {
+    "threshold": 0.6992898303421637,
+    "roc_auc": 0.9773226600274527,
+    "pr_auc": 0.8857315315097194,
+    "precision": 0.9325842696629213,
+    "recall": 0.8469387755102041,
+    "f1": 0.8877005347593583,
+    "balanced_accuracy": 0.92316641865795,
+    "mcc": 0.8876912704992734,
+    "selected_feature_count": 7,
+    "model": "random_forest",
+    "best_fitness": 0.7751318570959297,
+    "converged_at": 18
+  },
+  "selected_features": [
+    "Time",
+    "V2",
+    "V9",
+    "V10",
+    "V12",
+    "V14",
+    "V25"
+  ]
+}

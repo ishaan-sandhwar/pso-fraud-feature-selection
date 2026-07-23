@@ -3,6 +3,14 @@ __pycache__/
 .venv/
 .env
 .streamlit/
-outputs/
-models/
+
+# Raw dataset — 144 MB, exceeds GitHub's 100 MB file limit.
+# Download from https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+data/raw/*.csv
+
+# Parquet cache — regenerated on first training run
 data/processed/
+
+# Tracked instead of ignored: outputs/ (result figures + metric reports)
+# and models/ (.joblib bundles) are committed so the dashboard is
+# demoable without re-training or downloading the raw dataset.
