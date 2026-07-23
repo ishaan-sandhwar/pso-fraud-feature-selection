@@ -42,9 +42,30 @@ pso-credit-card-fraud/
 ```
 
 ## Setup
-```bash
+
+Requires Python 3.10+ (developed on 3.13).
+
+**Windows (PowerShell)**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+If PowerShell refuses to run the activate script (`running scripts is disabled on this system`),
+either allow it once with `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, or skip activation
+and call the venv interpreter directly: `.\.venv\Scripts\python.exe -m pip install -r requirements.txt`.
+
+**macOS / Linux**
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+In VS Code, select the interpreter with `Ctrl+Shift+P` → *Python: Select Interpreter* → `.venv`.
 
 ## Dataset
 Place `creditcard.csv` at `data/raw/creditcard.csv`.  
