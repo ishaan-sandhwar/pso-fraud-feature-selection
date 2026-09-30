@@ -14,6 +14,7 @@ from typing import Any, Dict, List
 
 import joblib
 import pandas as pd
+from sklearn.base import clone
 from sklearn.model_selection import train_test_split
 
 from src.cache import load_with_parquet_cache
@@ -105,6 +106,27 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
     )
     all_features = list(X_train.columns)
 
+    # ── Validation split (carved from the training data) ───────────────────────
+    # It is used twice: PSO scores candidate feature subsets on it, and every
+    # model's decision threshold is tuned on it. The test set never tunes
+    # anything; each model is scored on it exactly once.
+    X_search_train, X_val, y_search_train, y_val = train_test_split(
+        X_train,
+        y_train,
+        test_size=validation_size,
+        stratify=y_train,
+        random_state=random_state,
+    )
+
+    def tune_threshold(pipeline, features) -> float:
+        """F1-optimal threshold, found on the validation split.
+
+        Uses a copy of `pipeline` fitted without the validation rows, so the
+        threshold is never chosen on data the model was trained on.
+        """
+        probe = clone(pipeline).fit(X_search_train[features], y_search_train)
+        return best_threshold_by_f1(y_val, probe.predict_proba(X_val[features])[:, 1])
+
     # ── Baseline ───────────────────────────────────────────────────────────────
     t2 = time.time()
     baseline_pipeline = build_training_pipeline(
@@ -113,21 +135,14 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
         use_smote=use_smote,
         random_state=random_state,
     )
+    baseline_best_threshold = tune_threshold(baseline_pipeline, all_features)
     baseline_pipeline.fit(X_train, y_train)
     baseline_proba = baseline_pipeline.predict_proba(X_test)[:, 1]
-    baseline_best_threshold = best_threshold_by_f1(y_test, baseline_proba)
     baseline_metrics = compute_metrics(y_test, baseline_proba, threshold=baseline_best_threshold)
     _timer("baseline training", t2)
 
     # ── PSO feature selection ──────────────────────────────────────────────────
-    # We split part of the training set for validating feature subsets proposed by PSO.
-    X_search_train, X_val, y_search_train, y_val = train_test_split(
-        X_train,
-        y_train,
-        test_size=validation_size,
-        stratify=y_train,
-        random_state=random_state,
-    )
+    # Feature subsets proposed by PSO are scored on the validation split defined above.
 
     metric_weights = config["pso"]["metric_weights"]
     feature_penalty = float(config["pso"]["feature_penalty"])
@@ -188,11 +203,28 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
         use_smote=use_smote,
         random_state=random_state,
     )
+    pso_best_threshold = tune_threshold(final_pipeline, selected_features)
     final_pipeline.fit(X_train[selected_features], y_train)
     pso_proba = final_pipeline.predict_proba(X_test[selected_features])[:, 1]
-    pso_best_threshold = best_threshold_by_f1(y_test, pso_proba)
     pso_metrics = compute_metrics(y_test, pso_proba, threshold=pso_best_threshold)
     _timer("final model training", t4)
+
+    # ── Ablation: the same final model on ALL features ─────────────────────────
+    # Baseline (logistic regression, 30 features) vs PSO model (random forest,
+    # 7 features) changes the model AND the feature set. This run changes only
+    # the feature set, so it isolates what feature selection costs or gains.
+    t5 = time.time()
+    full_pipeline = build_training_pipeline(
+        model_name=final_model_name,
+        numeric_features=[c for c in scale_columns if c in all_features],
+        use_smote=use_smote,
+        random_state=random_state,
+    )
+    full_best_threshold = tune_threshold(full_pipeline, all_features)
+    full_pipeline.fit(X_train, y_train)
+    full_proba = full_pipeline.predict_proba(X_test)[:, 1]
+    full_metrics = compute_metrics(y_test, full_proba, threshold=full_best_threshold)
+    _timer("all-features ablation", t5)
 
     # ── Save outputs ───────────────────────────────────────────────────────────
     predictions_df = pd.DataFrame(
@@ -200,6 +232,7 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
             "y_true": y_test.to_numpy(),
             "baseline_proba": baseline_proba,
             "pso_proba": pso_proba,
+            "all_features_proba": full_proba,
         }
     )
     predictions_df.to_csv(report_dir / "predictions.csv", index=False)
@@ -235,12 +268,12 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
     )
     save_roc_comparison(
         y_test,
-        {"Baseline": baseline_proba, "PSO + Final Model": pso_proba},
+        {"Baseline": baseline_proba, "PSO + Final Model": pso_proba, "Final model, all features": full_proba},
         figure_dir / "roc_comparison.png",
     )
     save_pr_comparison(
         y_test,
-        {"Baseline": baseline_proba, "PSO + Final Model": pso_proba},
+        {"Baseline": baseline_proba, "PSO + Final Model": pso_proba, "Final model, all features": full_proba},
         figure_dir / "pr_comparison.png",
     )
     save_feature_importance_plot(importance_df, figure_dir / "feature_importance.png")
@@ -255,7 +288,15 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
             "best_fitness": pso_result.best_score,
             "converged_at": pso_result.converged_at,
         },
+        "all_features_final_model": {
+            **full_metrics,
+            "selected_feature_count": len(all_features),
+            "model": final_model_name,
+        },
         "selected_features": selected_features,
+        "threshold_selection": "F1-optimal on a validation split of the training data (never the test set)",
+        "n_test_rows": int(len(y_test)),
+        "n_test_fraud": int(y_test.sum()),
     }
     _write_json(report_dir / "metrics_summary.json", metrics_summary)
 
@@ -270,6 +311,7 @@ def run_training(config_path: str = "configs/config.yaml") -> Dict[str, Any]:
             "selected_feature_count": len(selected_features),
             "baseline_threshold": baseline_best_threshold,
             "pso_threshold": pso_best_threshold,
+            "all_features_threshold": full_best_threshold,
             "pso_converged_at": pso_result.converged_at,
         },
     )

@@ -19,7 +19,8 @@
     "V25"
   ],
   "selected_feature_count": 7,
-  "baseline_threshold": 0.9999882132828916,
-  "pso_threshold": 0.6992898303421637,
+  "baseline_threshold": 0.9999935524874625,
+  "pso_threshold": 0.7202578234760816,
+  "all_features_threshold": 0.7410744004767587,
   "pso_converged_at": 18
 }

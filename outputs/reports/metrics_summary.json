@@ -1,29 +1,41 @@
 {
   "baseline": {
-    "threshold": 0.9999882132828916,
+    "threshold": 0.9999935524874625,
     "roc_auc": 0.974397050276382,
     "pr_auc": 0.881296748395403,
-    "precision": 0.9879518072289156,
-    "recall": 0.8367346938775511,
-    "f1": 0.9060773480662984,
-    "balanced_accuracy": 0.9183168520892502,
-    "mcc": 0.9084073770179174,
+    "precision": 0.9878048780487805,
+    "recall": 0.826530612244898,
+    "f1": 0.9,
+    "balanced_accuracy": 0.9132148112729237,
+    "mcc": 0.9027373186475558,
     "selected_feature_count": 30,
     "model": "logistic_regression"
   },
   "pso_model": {
-    "threshold": 0.6992898303421637,
+    "threshold": 0.7202578234760816,
     "roc_auc": 0.9773226600274527,
     "pr_auc": 0.8857315315097194,
-    "precision": 0.9325842696629213,
-    "recall": 0.8469387755102041,
-    "f1": 0.8877005347593583,
-    "balanced_accuracy": 0.92316641865795,
-    "mcc": 0.8876912704992734,
+    "precision": 0.9425287356321839,
+    "recall": 0.8367346938775511,
+    "f1": 0.8864864864864865,
+    "balanced_accuracy": 0.9181148726911488,
+    "mcc": 0.8870292298131879,
     "selected_feature_count": 7,
     "model": "random_forest",
     "best_fitness": 0.7751318570959297,
     "converged_at": 18
+  },
+  "all_features_final_model": {
+    "threshold": 0.7410744004767587,
+    "roc_auc": 0.9855141612290239,
+    "pr_auc": 0.8980470757915213,
+    "precision": 0.9647058823529412,
+    "recall": 0.8367346938775511,
+    "f1": 0.8961748633879781,
+    "balanced_accuracy": 0.9182158623901995,
+    "mcc": 0.8975304124823462,
+    "selected_feature_count": 30,
+    "model": "random_forest"
   },
   "selected_features": [
     "Time",
@@ -33,5 +45,8 @@
     "V12",
     "V14",
     "V25"
-  ]
+  ],
+  "threshold_selection": "F1-optimal on a validation split of the training data (never the test set)",
+  "n_test_rows": 10000,
+  "n_test_fraud": 98
 }
