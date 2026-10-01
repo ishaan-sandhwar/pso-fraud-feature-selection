@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="150" viewBox="0 0 1280 150" role="img" aria-label="Key numbers: 30 → 7 features kept by the swarm; 0.977 / 0.986 ROC-AUC with 7 vs all 30 features; 98 frauds in the test set; ~2 min swarm search on one CPU core; 7 unit tests on the PSO core">
+<rect x="0.0" y="0" width="243.2" height="150" rx="14" fill="#0f172a"/>
+<rect x="0.5" y=".5" width="242.2" height="149" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
+<rect x="22.0" y="0" width="199.2" height="4" rx="2" fill="#38bdf8"/>
+<text x="121.6" y="78" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="42" font-weight="800" fill="#ffffff">30 → 7</text>
+<text x="121.6" y="110" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15.5" fill="#a8b3c4">features kept by the swarm</text>
+<rect x="259.2" y="0" width="243.2" height="150" rx="14" fill="#0f172a"/>
+<rect x="259.7" y=".5" width="242.2" height="149" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
+<rect x="281.2" y="0" width="199.2" height="4" rx="2" fill="#a78bfa"/>
+<text x="380.8" y="78" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="24" font-weight="800" fill="#ffffff">0.977 / 0.986</text>
+<text x="380.8" y="110" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15.5" fill="#a8b3c4">ROC-AUC with 7 vs</text>
+<text x="380.8" y="131" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15.5" fill="#a8b3c4">all 30 features</text>
+<rect x="518.4" y="0" width="243.2" height="150" rx="14" fill="#0f172a"/>
+<rect x="518.9" y=".5" width="242.2" height="149" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
+<rect x="540.4" y="0" width="199.2" height="4" rx="2" fill="#34d399"/>
+<text x="640.0" y="78" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="42" font-weight="800" fill="#ffffff">98</text>
+<text x="640.0" y="110" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15.5" fill="#a8b3c4">frauds in the test set</text>
+<rect x="777.6" y="0" width="243.2" height="150" rx="14" fill="#0f172a"/>
+<rect x="778.1" y=".5" width="242.2" height="149" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
+<rect x="799.6" y="0" width="199.2" height="4" rx="2" fill="#f59e0b"/>
+<text x="899.2" y="78" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="42" font-weight="800" fill="#ffffff">~2 min</text>
+<text x="899.2" y="110" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15.5" fill="#a8b3c4">swarm search on</text>
+<text x="899.2" y="131" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15.5" fill="#a8b3c4">one CPU core</text>
+<rect x="1036.8" y="0" width="243.2" height="150" rx="14" fill="#0f172a"/>
+<rect x="1037.3" y=".5" width="242.2" height="149" rx="13.5" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
+<rect x="1058.8" y="0" width="199.2" height="4" rx="2" fill="#f472b6"/>
+<text x="1158.4" y="78" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="42" font-weight="800" fill="#ffffff">7</text>
+<text x="1158.4" y="110" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15.5" fill="#a8b3c4">unit tests on the PSO core</text>
+</svg>

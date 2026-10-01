@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="835" viewBox="0 0 1200 835" role="img" aria-label="Pipeline: sample the Kaggle data, split into train, validation and test, run the binary PSO search, then evaluate the final random forest on 7 features against the same forest on all 30, with thresholds tuned on validation and bootstrap intervals on the test set">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/></marker></defs>
+<rect width="1200" height="835" rx="18" fill="#0b1220"/>
+<rect x="1" y="1" width="1198" height="833" rx="17" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
+<rect x="465" y="24" width="12" height="12" rx="3" fill="#38bdf8"/><text x="485" y="35" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="13.5" font-weight="500" fill="#d5deea">deterministic</text>
+<rect x="596" y="24" width="12" height="12" rx="3" fill="#a78bfa"/><text x="616" y="35" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="13.5" font-weight="500" fill="#d5deea">model involved</text>
+<rect x="278" y="60" width="645" height="48" rx="12" fill="#0f172a" stroke="#ffffff" stroke-opacity="0.18"/>
+<text x="600" y="91" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="18" font-weight="700" fill="#ffffff">Kaggle credit-card fraud data  ·  284,807 rows, 492 frauds</text>
+<path d="M 600 110 L 600 136" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="30" y="138" width="1140" height="172" rx="16" fill="#38bdf8" fill-opacity="0.05" stroke="#38bdf8" stroke-opacity="0.25" stroke-dasharray="6 6"/>
+<text x="52" y="161" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="13" font-weight="700" fill="#38bdf8">PREPARE</text>
+<rect x="52" y="172" width="353" height="120" rx="12" fill="#111b2e"/>
+<rect x="52" y="172" width="353" height="120" rx="12" fill="none" stroke="#38bdf8" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="60" y="188" width="4" height="88" rx="2" fill="#38bdf8"/>
+<circle cx="90" cy="202" r="14" fill="#38bdf8"/>
+<text x="90" y="208" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">1</text>
+<text x="112" y="209" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Sample</text>
+<text x="76" y="240" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">All 492 frauds plus 49,508 random</text>
+<text x="76" y="261" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">legitimate rows: 0.98% fraud</text>
+<path d="M 406 232.0 L 422 232.0" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="423" y="172" width="353" height="120" rx="12" fill="#111b2e"/>
+<rect x="423" y="172" width="353" height="120" rx="12" fill="none" stroke="#38bdf8" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="431" y="188" width="4" height="88" rx="2" fill="#38bdf8"/>
+<circle cx="461" cy="202" r="14" fill="#38bdf8"/>
+<text x="461" y="208" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">2</text>
+<text x="483" y="209" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Split</text>
+<text x="447" y="240" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">80/20 train and test, then a validation</text>
+<text x="447" y="261" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">split inside train</text>
+<path d="M 778 232.0 L 794 232.0" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="795" y="172" width="353" height="120" rx="12" fill="#111b2e"/>
+<rect x="795" y="172" width="353" height="120" rx="12" fill="none" stroke="#38bdf8" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="803" y="188" width="4" height="88" rx="2" fill="#38bdf8"/>
+<circle cx="833" cy="202" r="14" fill="#38bdf8"/>
+<text x="833" y="208" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">3</text>
+<text x="855" y="209" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Pipeline</text>
+<text x="819" y="240" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">RobustScaler, SMOTE on training rows only,</text>
+<text x="819" y="261" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">then the model</text>
+<path d="M 600 312 L 600 338" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="30" y="340" width="1140" height="172" rx="16" fill="#a78bfa" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.25" stroke-dasharray="6 6"/>
+<text x="52" y="363" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="13" font-weight="700" fill="#a78bfa">SEARCH  ·  src/pso.py</text>
+<rect x="52" y="374" width="353" height="120" rx="12" fill="#111b2e"/>
+<rect x="52" y="374" width="353" height="120" rx="12" fill="none" stroke="#a78bfa" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="60" y="390" width="4" height="88" rx="2" fill="#a78bfa"/>
+<circle cx="90" cy="404" r="14" fill="#a78bfa"/>
+<text x="90" y="410" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">4</text>
+<text x="112" y="411" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Binary PSO</text>
+<text x="76" y="442" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">30 particles, sigmoid bit flips, at least</text>
+<text x="76" y="463" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">5 features kept</text>
+<path d="M 406 434.0 L 422 434.0" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="423" y="374" width="353" height="120" rx="12" fill="#111b2e"/>
+<rect x="423" y="374" width="353" height="120" rx="12" fill="none" stroke="#38bdf8" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="431" y="390" width="4" height="88" rx="2" fill="#38bdf8"/>
+<circle cx="461" cy="404" r="14" fill="#38bdf8"/>
+<text x="461" y="410" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">5</text>
+<text x="483" y="411" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Fitness</text>
+<text x="447" y="442" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">0.45 PR-AUC + 0.35 recall + 0.20 F1 minus</text>
+<text x="447" y="463" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">a size penalty, on validation</text>
+<path d="M 778 434.0 L 794 434.0" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="795" y="374" width="353" height="120" rx="12" fill="#111b2e"/>
+<rect x="795" y="374" width="353" height="120" rx="12" fill="none" stroke="#38bdf8" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="803" y="390" width="4" height="88" rx="2" fill="#38bdf8"/>
+<circle cx="833" cy="404" r="14" fill="#38bdf8"/>
+<text x="833" y="410" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">6</text>
+<text x="855" y="411" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Early stop</text>
+<text x="819" y="442" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">Best fitness last improved at iteration 8;</text>
+<text x="819" y="463" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">stopped at 18 of 50</text>
+<path d="M 600 514 L 600 540" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="30" y="542" width="1140" height="193" rx="16" fill="#fb923c" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.25" stroke-dasharray="6 6"/>
+<text x="52" y="565" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="13" font-weight="700" fill="#fb923c">EVALUATE  ·  src/train_pipeline.py</text>
+<rect x="52" y="576" width="260" height="141" rx="12" fill="#111b2e"/>
+<rect x="52" y="576" width="260" height="141" rx="12" fill="none" stroke="#a78bfa" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="60" y="592" width="4" height="109" rx="2" fill="#a78bfa"/>
+<circle cx="90" cy="606" r="14" fill="#a78bfa"/>
+<text x="90" y="612" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">7</text>
+<text x="112" y="613" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Final model</text>
+<text x="76" y="644" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">Random forest on the 7</text>
+<text x="76" y="665" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">selected features</text>
+<path d="M 314 646.5 L 330 646.5" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="330" y="576" width="260" height="141" rx="12" fill="#111b2e"/>
+<rect x="330" y="576" width="260" height="141" rx="12" fill="none" stroke="#a78bfa" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="338" y="592" width="4" height="109" rx="2" fill="#a78bfa"/>
+<circle cx="368" cy="606" r="14" fill="#a78bfa"/>
+<text x="368" y="612" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">8</text>
+<text x="390" y="613" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Ablation</text>
+<text x="354" y="644" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">The same forest on all 30</text>
+<text x="354" y="665" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">features</text>
+<path d="M 592 646.5 L 608 646.5" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="609" y="576" width="260" height="141" rx="12" fill="#111b2e"/>
+<rect x="609" y="576" width="260" height="141" rx="12" fill="none" stroke="#38bdf8" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="617" y="592" width="4" height="109" rx="2" fill="#38bdf8"/>
+<circle cx="647" cy="606" r="14" fill="#38bdf8"/>
+<text x="647" y="612" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">9</text>
+<text x="669" y="613" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Thresholds</text>
+<text x="633" y="644" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">F1-optimal on validation,</text>
+<text x="633" y="665" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">never on the test set</text>
+<path d="M 870 646.5 L 886 646.5" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="888" y="576" width="260" height="141" rx="12" fill="#111b2e"/>
+<rect x="888" y="576" width="260" height="141" rx="12" fill="none" stroke="#38bdf8" stroke-opacity="0.75" stroke-width="1.5"/>
+<rect x="896" y="592" width="4" height="109" rx="2" fill="#38bdf8"/>
+<circle cx="926" cy="606" r="14" fill="#38bdf8"/>
+<text x="926" y="612" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="15" font-weight="800" fill="#0b1220">10</text>
+<text x="948" y="613" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="20" font-weight="700" fill="#ffffff">Intervals</text>
+<text x="912" y="644" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">95% bootstrap intervals,</text>
+<text x="912" y="665" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">1,000 resamples of the test</text>
+<text x="912" y="686" text-anchor="start" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="14.5" font-weight="400" fill="#d5deea">rows</text>
+<path d="M 600 737 L 600 763" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="212" y="765" width="776" height="48" rx="12" fill="#0f172a" stroke="#ffffff" stroke-opacity="0.18"/>
+<text x="600" y="796" text-anchor="middle" font-family='"Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif' font-size="18" font-weight="700" fill="#ffffff">Metrics   ·   figures   ·   bootstrap_ci.json   ·   Streamlit dashboard</text>
+</svg>
