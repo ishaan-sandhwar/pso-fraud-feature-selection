@@ -1,10 +1,48 @@
-# 🧬 PSO Feature Selection — Credit Card Fraud Detection
+<p align="center">
+  <img src="docs/banner.svg" alt="PSO Feature Selection: a swarm picks 7 of 30 fraud-detection features" width="100%">
+</p>
+
+<div align="center">
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 
-Binary Particle Swarm Optimization (PSO), written from scratch, selects **7 of 30 features** on the [Kaggle Credit Card Fraud dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud). The question this repo answers: *how much does a 77% smaller feature set cost?* On a test set with 98 frauds, the answer is **nothing that can be told apart from noise**.
+**Binary Particle Swarm Optimization, written from scratch, selects 7 of 30 features on the [Kaggle Credit Card Fraud dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud). The question: how much does a 77% smaller feature set cost?**<br>
+On a test set with 98 frauds, the answer is nothing that can be told apart from noise.
+
+[📊 Results](#-results) · [🧬 How the search works](#-how-the-search-works) · [🚧 Caveats](#-caveats) · [🧰 Run it](#-run-it)
+
+</div>
+
+<p align="center">
+  <img src="docs/stats.svg" alt="30 features reduced to 7, ROC-AUC 0.977 with 7 features against 0.986 with all 30, 98 frauds in the test set, about 2 minutes for the swarm search on one CPU core, 7 unit tests" width="100%">
+</p>
+
+## ✨ What makes it different
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h4>🧬 PSO from scratch</h4>
+      Binary PSO with a sigmoid transfer function, a repair step that keeps at least 5 features, and early stopping. Seven unit tests cover the swarm.
+    </td>
+    <td width="50%" valign="top">
+      <h4>🔬 A fair comparison</h4>
+      The same random forest also runs on all 30 features, so the effect of feature selection is separated from the change of model.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <h4>🧮 Intervals, not just numbers</h4>
+      With 98 frauds in the test set, every metric carries a 95% bootstrap interval, and the paired differences between models are reported too.
+    </td>
+    <td valign="top">
+      <h4>🚫 No test-set tuning</h4>
+      Decision thresholds are tuned on a validation split carved from the training data and never on the test set.
+    </td>
+  </tr>
+</table>
 
 ## 📊 Results
 
@@ -41,6 +79,10 @@ Test set: 10,000 rows, 98 frauds. Every decision threshold is the F1-optimal one
 
 ## 🧬 How the search works
 
+<p align="center">
+  <img src="docs/architecture.svg" alt="Pipeline: sample the Kaggle data, split into train, validation and test, run the binary PSO search, then evaluate the final random forest on 7 features against the same forest on all 30, with thresholds tuned on validation and bootstrap intervals on the test set" width="100%">
+</p>
+
 - **Binary PSO**: each particle is a 30-bit feature mask. Velocities pass through a sigmoid to give bit-flip probabilities, a repair step guarantees at least 5 features, and the search stops early after 10 iterations without improvement.
 - **Fitness** (higher is better), scored on the validation split with a fast logistic-regression model at threshold 0.5: `0.45 · PR-AUC + 0.35 · recall + 0.20 · F1 − 0.05 · (selected / 30)`.
 - **Swarm**: 30 particles, up to 50 iterations, inertia 0.72, cognitive and social 1.49. Best fitness 0.775 — it last improved at iteration 8 and early stopping ended the run at iteration 18.
@@ -50,7 +92,7 @@ Test set: 10,000 rows, 98 frauds. Every decision threshold is the F1-optimal one
 - **Metrics**: ROC-AUC, PR-AUC, precision, recall, F1, MCC, balanced accuracy.
 - **Dashboard**: overview, PSO analysis, live threshold tuning and live prediction (Streamlit).
 
-## ⚠️ Caveats
+## 🚧 Caveats
 
 - **Only 98 frauds in the test set**, so every interval is wide (ROC-AUC roughly ±0.02).
 - **The sample over-represents fraud**: 0.98% of rows vs 0.17% in the full dataset. Precision and PR-AUC would be lower at the natural rate.
@@ -58,7 +100,67 @@ Test set: 10,000 rows, 98 frauds. Every decision threshold is the F1-optimal one
 - **The search model and the final model differ**: subsets are scored with logistic regression, the final model is a random forest, so a subset chosen for one is not necessarily the best for the other.
 - **Earlier versions of this repo tuned the threshold on the test set.** That inflated F1 slightly (baseline 0.906, PSO model 0.888); with thresholds tuned on the validation split they are 0.900 and 0.886. ROC-AUC and PR-AUC never depended on the threshold.
 
-## 📂 Project Structure
+## 🧰 Run it
+
+**Dataset.**
+
+Place `creditcard.csv` at `data/raw/creditcard.csv`.
+Download: <https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud>
+
+The raw CSV (144 MB) is **not** committed — it exceeds GitHub's 100 MB per-file limit. The parquet cache in `data/processed/` is also excluded; it regenerates on the first run.
+
+**Pre-computed artifacts.**
+
+Trained models (`models/`) and results (`outputs/`) **are** committed, so you can launch the dashboard and inspect metrics without re-training or downloading the dataset first:
+
+```
+streamlit run app/dashboard.py
+```
+
+**Run.**
+
+```
+python run_training.py     # baseline, PSO search, final model, all-features ablation, figures, reports
+python -m src.bootstrap    # confidence intervals from outputs/reports (no dataset needed)
+streamlit run app/dashboard.py
+pytest tests/ -v
+```
+
+**Speed tip:** set `sample_size: null` in `configs/config.yaml` to use the full dataset, or keep `50000` for fast runs. The first run saves a parquet cache.
+
+## 📚 Reference
+
+<details>
+<summary><b>🛠️ Setup (Windows, macOS, Linux)</b></summary>
+
+Requires Python 3.10+ (developed on 3.13).
+
+**Windows (PowerShell)**
+
+```
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+If PowerShell refuses to run the activate script (`running scripts is disabled on this system`), either allow it once with `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, or skip activation and call the venv interpreter directly: `.\.venv\Scripts\python.exe -m pip install -r requirements.txt`.
+
+**macOS / Linux**
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+In VS Code, select the interpreter with `Ctrl+Shift+P` → *Python: Select Interpreter* → `.venv`.
+
+</details>
+
+<details>
+<summary><b>📂 Project structure</b></summary>
 
 ```
 pso-fraud-feature-selection/
@@ -91,59 +193,10 @@ pso-fraud-feature-selection/
 └── run_training.py
 ```
 
-## 🛠️ Setup
+</details>
 
-Requires Python 3.10+ (developed on 3.13).
-
-**Windows (PowerShell)**
-
-```
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-If PowerShell refuses to run the activate script (`running scripts is disabled on this system`), either allow it once with `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, or skip activation and call the venv interpreter directly: `.\.venv\Scripts\python.exe -m pip install -r requirements.txt`.
-
-**macOS / Linux**
-
-```
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-In VS Code, select the interpreter with `Ctrl+Shift+P` → *Python: Select Interpreter* → `.venv`.
-
-## 📥 Dataset
-
-Place `creditcard.csv` at `data/raw/creditcard.csv`.
-Download: <https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud>
-
-The raw CSV (144 MB) is **not** committed — it exceeds GitHub's 100 MB per-file limit. The parquet cache in `data/processed/` is also excluded; it regenerates on the first run.
-
-## 📦 Pre-computed Artifacts
-
-Trained models (`models/`) and results (`outputs/`) **are** committed, so you can launch the dashboard and inspect metrics without re-training or downloading the dataset first:
-
-```
-streamlit run app/dashboard.py
-```
-
-## ▶️ Run
-
-```
-python run_training.py     # baseline, PSO search, final model, all-features ablation, figures, reports
-python -m src.bootstrap    # confidence intervals from outputs/reports (no dataset needed)
-streamlit run app/dashboard.py
-pytest tests/ -v
-```
-
-**Speed tip:** set `sample_size: null` in `configs/config.yaml` to use the full dataset, or keep `50000` for fast runs. The first run saves a parquet cache.
-
-## ⚙️ Key Config Options (`configs/config.yaml`)
+<details>
+<summary><b>⚙️ Key config options (<code>configs/config.yaml</code>)</b></summary>
 
 | Key | Default | Description |
 | --- | --- | --- |
@@ -155,3 +208,5 @@ pytest tests/ -v
 | `pso.n_iterations` | `50` | Max PSO iterations |
 | `pso.early_stopping_rounds` | `10` | Stop if no improvement for N iterations |
 | `pso.min_features` | `5` | Minimum features a mask may keep |
+
+</details>
